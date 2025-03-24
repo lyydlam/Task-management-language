@@ -31,7 +31,7 @@ AddTask:
 
 
 
-// 时间计算规则
+// define time calculation rules
 TimeCalculation:
     'calculate' 'time' 'for' task=[AddTask|STRING] ;
     
@@ -45,7 +45,7 @@ CalculateSystemPeople:
 TaskStatus:
    'status' 'of' task=[AddTask|STRING] 'is' status=TaskstatusCommands;
     
-/* 任务状态的枚举 */
+// the status can only be this three types
 enum TaskstatusCommands:
     completed | waiting | in_progress;
 

@@ -1,0 +1,35 @@
+group TeamA size 3
+group TeamB size 2
+
+
+add task "T1" 
+	Requirement"AnalysisRequirement" 
+    time 2.5 
+    priority 1 
+    repeat 2 times 
+    people 3 + 1 * TeamA
+
+add task "T2" 
+	Requirement "Design" 
+    time 1.0 
+    priority 2 
+    repeat 1 times 
+    people 2 + TeamB 
+    depends on "T1"
+
+add task "T3" 
+	Requirement "Testing" 
+    time 5.0 
+    priority 1 
+    repeat 3 times 
+    people 5 * TeamB 
+    depends on "T1"
+    
+
+status of "T1" is completed
+status of "T2" is in_progress
+status of "T3" is waiting
+
+calculate time for "T3"
+calculate total time
+calculate total people

@@ -1,0 +1,35 @@
+Program contains:
+- 3 turn commands
+- 1 variable declarations
+- 3 task status checks
+- Total time required (waiting/inprogress): 16.0 minutes
+- Total people required: -1
+
+Task Details:
+- Task name: T1
+  Requirement: AnalysisRequirement
+  Required Time: 5.0 minutes
+  Priority: 1
+  Repeat Count: 2 times
+  Dependencies: 
+  People Required Expression: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl.AdditionImpl@761d20de (operator: [+])  // not evaluated
+  Status: completed
+
+- Task name: T2
+  Requirement: Design
+  Required Time: 1.0 minutes
+  Priority: 2
+  Repeat Count: 1 times
+  Dependencies: T1
+  People Required Expression: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl.AdditionImpl@13cf2632 (operator: [+])  // not evaluated
+  Status: in_progress
+
+- Task name: T3
+  Requirement: Testing
+  Required Time: 15.0 minutes
+  Priority: 1
+  Repeat Count: 3 times
+  Dependencies: T1
+  People Required Expression: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl.MultiplicationImpl@b833dd7 (operator: [*])  // not evaluated
+  Status: waiting
+

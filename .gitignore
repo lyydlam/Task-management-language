@@ -1,0 +1,11 @@
+# Eclipse-specific
+.classpath
+.project
+.settings/
+bin/
+xtend-gen/
+src-gen/
+
+# OS-specific
+.DS_Store
+Thumbs.db

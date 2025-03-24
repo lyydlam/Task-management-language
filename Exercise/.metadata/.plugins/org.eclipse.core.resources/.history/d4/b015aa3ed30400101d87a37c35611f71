@@ -1,0 +1,66 @@
+grammar uk.ac.kcl.inf.languages.turtles.TurtlesLanguage with org.eclipse.xtext.common.Terminals
+
+generate turtlesLanguage "http://www.ac.uk/kcl/inf/languages/turtles/TurtlesLanguage"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+TurtleProgram:
+	statements += Statement*
+;
+	
+Statement:
+	MoveStatement |
+	TurnStatement |
+	LoopStatement |
+	VariableDeclaration
+;
+
+VariableDeclaration:
+	"var" name=ID "=" value=INT
+;
+
+LoopStatement:
+	count = Addition "times" "do"
+	  statements += Statement+
+	"end"
+;
+MoveStatement:
+	command = MoveCommand "(" steps = IntExpression ")"
+;
+
+enum MoveCommand:
+	forward | backward
+;
+
+TurnStatement:
+	"turn" command = TurnCommand "by" degrees = REAL "degrees"
+;
+
+enum TurnCommand:
+	left | right
+;
+
+Addition returns IntExpression:
+	Multiplication ({Addition.left = current} operator+=("+"|"-") right+=Multiplication)*
+;
+
+Multiplication returns IntExpression:
+	Primary ({Multiplication.left = current} operator+=("*"|"/") right+=Primary)*
+;
+
+Primary returns IntExpression:
+	IntLiteral |
+	IntVarExpression |
+	"(" Addition ")"
+;
+
+IntLiteral:
+	val = INT
+;
+
+IntVarExpression:
+	var = [VariableDeclaration]
+;
+
+REAL returns ecore::EFloat hidden():
+	INT? "." INT
+; 

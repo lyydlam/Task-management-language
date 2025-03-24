@@ -1,0 +1,87 @@
+grammar uk.ac.kcl.inf.languages.turtles.TurtlesLanguage with org.eclipse.xtext.common.Terminals
+
+generate turtlesLanguage "http://www.ac.uk/kcl/inf/languages/turtles/TurtlesLanguage"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+TurtleProgram:
+	statements += Statement*
+;
+	
+Statement:
+	AddTask |
+	RemoveTask |
+	MarkTaskCompleted |
+	VariableDeclaration |
+	TaskStatus |
+	TaskReference |
+	LoopStatement |
+	TimeCalculation |
+	CalculateSystemTime
+;
+
+VariableDeclaration:
+	"var" name=ID "=" value=INT
+;
+
+AddTask:
+    'add' 'task' id=INT name=STRING 'time' requiredTime=REAL 'priority' priority=INT
+    ('depend' dependencies+=[AddTask] (',' dependencies+=[AddTask])*)?
+    ('repeat' repeatCount=INT?)?; //allow 'null'
+
+RemoveTask:
+    'remove' 'task' id=INT;
+
+MarkTaskCompleted:
+    'complete' 'task' id=INT;
+
+TaskReference:
+    ref=[AddTask];
+    
+LoopStatement:
+	count = Addition "times" "do"
+	  statements += Statement+
+	"end"
+;
+
+// 时间计算规则
+TimeCalculation:
+    'calculate' 'time' 'for' task=[AddTask] 'with' 'breaks' 'every' breakInterval=INT 'minutes' 'work' workInterval=INT 'minutes'
+;
+CalculateSystemTime:
+	'calculate' 'total' 'time'
+;
+
+// 任务状态
+TaskStatus:
+    'status' 'of' task=[AddTask] 'is' status=TaskstatusCommands;
+    
+/* 任务状态的枚举 */
+enum TaskstatusCommands:
+    completed | waiting | in_progress
+;
+
+Addition returns IntExpression:
+	Multiplication ({Addition.left = current} operator+=("+"|"-") right+=Multiplication)*
+;
+
+Multiplication returns IntExpression:
+	Primary ({Multiplication.left = current} operator+=("*"|"/") right+=Primary)*
+;
+
+Primary returns IntExpression:
+	IntLiteral |
+	IntVarExpression |
+	"(" Addition ")"
+;
+
+IntLiteral:
+	val = INT
+;
+
+IntVarExpression:
+	var = [VariableDeclaration]
+;
+
+REAL returns ecore::EFloat hidden():
+	INT? "." INT
+; 

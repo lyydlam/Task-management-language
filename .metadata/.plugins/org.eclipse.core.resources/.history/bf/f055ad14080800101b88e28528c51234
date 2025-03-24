@@ -1,0 +1,56 @@
+package uk.ac.kcl.inf.languages.turtles
+
+import com.google.inject.Inject
+
+import org.eclipse.xpect.expectation.StringExpectation
+
+import uk.ac.kcl.inf.languages.turtles.turtlesLanguage.AddTask
+import uk.ac.kcl.inf.languages.turtles.turtlesLanguage.TaskStatus
+import uk.ac.kcl.inf.languages.turtles.turtlesLanguage.TurtleProgram
+
+import static extension org.eclipse.xpect.expectation.IStringExpectation.*
+
+class XPectTests {
+
+    @Inject
+    ParseHelper<TurtleProgram> parseHelper
+
+    @ParameterizedXpect
+    def void calculateTotalTime(CharSequence input, StringExpectation expectation) {
+        val model = parseHelper.parse(input.toString)
+        val totalTime = model.statements
+            .filter(typeof(AddTask))
+            .filter[model.statements.filter(TaskStatus).findFirst[it.task.id == id]?.status?.toString != "completed"]
+            .map[it.requiredTime * repeatCount]
+            .reduce[p1, p2|p1 + p2]
+        expectation.assertEquals(totalTime.toString)
+    }
+
+    @ParameterizedXpect
+    def void calculateTotalPeople(CharSequence input, StringExpectation expectation) {
+        val model = parseHelper.parse(input.toString)
+        val totalPeople = model.statements
+            .filter(typeof(AddTask))
+            .map[it.peopleRequired]
+            .reduce[p1, p2|p1 + p2]
+        expectation.assertEquals(totalPeople.toString)
+    }
+
+    @ParameterizedXpect
+    def void taskStatus(CharSequence input, @Parameter(name="id") String id, StringExpectation expectation) {
+        val model = parseHelper.parse(input.toString)
+        val task = model.statements.filter(typeof(AddTask)).findFirst[it.id == id]
+        val status = model.statements
+            .filter(typeof(TaskStatus))
+            .findFirst[it.task.id == task.id]?.status?.toString ?: "unknown"
+        expectation.assertEquals(status)
+    }
+
+    def String statusOf(TurtleProgram model, AddTask task) {
+        val status = model.statements
+            .filter(typeof(TaskStatus))
+            .findFirst[it.task.id == task.id]
+        return if (status !== null) status.status.toString else "waiting"
+    }
+
+}

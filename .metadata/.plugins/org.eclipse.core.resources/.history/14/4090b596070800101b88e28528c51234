@@ -1,0 +1,25 @@
+package uk.ac.kcl.inf.languages.turtles
+
+import org.eclipse.xtext.xbase.lib.Functions.Function1
+
+import com.google.inject.Inject
+import uk.ac.kcl.inf.languages.turtles.turtlesLanguage.TurtleProgram
+import uk.ac.kcl.inf.languages.turtles.turtlesLanguage.AddTask
+import uk.ac.kcl.inf.languages.turtles.turtlesLanguage.TaskStatus
+import org.eclipse.xpect.expectation.StringExpectation
+
+class XPectTests {
+
+    @Inject
+    ParseHelper<TurtleProgram> parseHelper
+
+    @ParameterizedXpect
+    def void calculateTotalTime(CharSequence input, StringExpectation expectation) {
+        val model = parseHelper.parse(input.toString)
+        val totalTime = model.statements.filter(AddTask).filter[statusOf(model, it) != "completed"].map[it.requiredTime * it.repeatCount].reduce[p1, p2|p1 + p2]
+        expectation.assertEquals(totalTime.toString)
+    }
+
+    @ParameterizedXpect
+    def void calculateTotalPeople(CharSequence input, StringExpectation expectation) {
+        val model = parseHelper

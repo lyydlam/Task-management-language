@@ -1,0 +1,48 @@
+grammar uk.ac.kcl.inf.languages.turtles.TurtlesLanguage with org.eclipse.xtext.common.Terminals
+
+generate turtlesLanguage "http://www.ac.uk/kcl/inf/languages/turtles/TurtlesLanguage"
+
+TurtleProgram:
+	statements += Statement*
+;
+	
+Statement:
+	MoveStatement |
+	TurnStatement |
+	LoopStatement |
+	VariableDeclaration
+;
+
+VariableDeclaration:
+	"var" name=ID "=" value=INT
+;
+
+LoopStatement:
+	count = IntExpression "times" "do"
+	  statements += Statement+
+	"end"
+;
+MoveStatement:
+	command = MoveCommand "(" steps = IntExpression ")"
+;
+
+enum MoveCommand:
+	forward | backward
+;
+
+TurnStatement:
+	"turn" command = TurnCommand "by" degrees = REAL "degrees"
+;
+
+enum TurnCommand:
+	left | right
+;
+
+IntExpression:
+	val = INT |
+	var = [VariableDeclaration]
+;
+
+REAL hidden():
+	INT? "." INT
+; 

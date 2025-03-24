@@ -1,0 +1,74 @@
+grammar uk.ac.kcl.inf.languages.turtles.TurtlesLanguage with org.eclipse.xtext.common.Terminals
+
+generate turtlesLanguage "http://www.ac.uk/kcl/inf/languages/turtles/TurtlesLanguage"
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+//定义了语言的语法规则（如任务定义、依赖关系、变量声明、循环语句等）
+TurtleProgram:
+	statements += Statement*
+;
+	
+Statement:
+	AddTask |
+	TaskStatus |
+	GroupDeclaration |
+	TimeCalculation |
+	CalculateSystemTime |
+	CalculateSystemPeople
+	
+;
+
+	
+AddTask:
+  'add' 'task' name=STRING 
+  'description' requirement=STRING
+  'time' requiredTime=REAL 
+  'priority' priority=INT
+  'repeat' repeatCount=INT 'times'
+  'people' peopleRequired=Addition
+  ('depends''on' dependencies+=[AddTask|STRING] (',' dependencies+=[AddTask])*)?
+;
+
+
+
+// 时间计算规则
+TimeCalculation:
+    'calculate' 'time' 'for' task=[AddTask] ;
+    
+CalculateSystemTime:
+	'calculate' 'total' 'time';
+	
+CalculateSystemPeople:
+	'calculate' 'total' 'people';
+
+
+TaskStatus:
+   'status' 'of' task=[AddTask|STRING] 'is' status=TaskstatusCommands;
+    
+/* 任务状态的枚举 */
+enum TaskstatusCommands:
+    completed | waiting | in_progress;
+
+Addition returns IntExpression:
+	Multiplication ({Addition.left = current} operator+=("+"|"-") right+=Multiplication)*;
+
+Multiplication returns IntExpression:
+	Primary ({Multiplication.left = current} operator+=("*"|"/") right+=Primary)*;
+
+Primary returns IntExpression:
+	IntLiteral |
+	GroupRefExpression |
+	"(" Addition ")";
+
+IntLiteral:
+	val = INT;
+
+GroupRefExpression:
+	group=[GroupDeclaration]
+;
+GroupDeclaration:
+    'group' name=ID 'size' size=INT;
+
+
+REAL returns ecore::EFloat hidden():
+	INT? "." INT; 

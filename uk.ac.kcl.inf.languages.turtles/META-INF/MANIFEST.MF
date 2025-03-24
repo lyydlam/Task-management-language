@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: uk.ac.kcl.inf.languages.turtles
+Bundle-ManifestVersion: 2
+Bundle-Name: uk.ac.kcl.inf.languages.turtles
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: uk.ac.kcl.inf.languages.turtles; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.16.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.37.0",
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
+ org.eclipse.xtend.lib;bundle-version="2.37.0",
+ org.eclipse.xtend.core;bundle-version="2.37.0",
+ org.eclipse.xpect;bundle-version="0.3.0",
+ org.eclipse.xpect.xtext.lib;bundle-version="0.3.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-21
+Export-Package: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.util,
+ uk.ac.kcl.inf.languages.turtles.services,
+ uk.ac.kcl.inf.languages.turtles.turtlesLanguage,
+ uk.ac.kcl.inf.languages.turtles.generator,
+ uk.ac.kcl.inf.languages.turtles.validation,
+ uk.ac.kcl.inf.languages.turtles,
+ uk.ac.kcl.inf.languages.turtles.serializer,
+ uk.ac.kcl.inf.languages.turtles.parser.antlr,
+ uk.ac.kcl.inf.languages.turtles.parser.antlr.internal,
+ uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl,
+ uk.ac.kcl.inf.languages.turtles.scoping
+Import-Package: org.apache.log4j

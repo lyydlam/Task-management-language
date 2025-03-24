@@ -1,0 +1,34 @@
+package uk.ac.kcl.inf.languages.turtles.xpect
+
+
+
+@InjectWith(uk.ac.kcl.inf.languages.turtles.TurtlesLanguageInjectorProvider)
+class XPectTests {
+
+    @Inject extension ParseHelper<TurtleProgram>
+    val generator = new TurtlesLanguageGenerator
+
+    @Xpect
+    def void calculateTotalTime(Resource resource, @XpectDouble doubleExpected) {
+        val model = resource.contents.head as TurtleProgram
+        val calculated = generator.calculateTotalTime(model)
+        assertEquals(doubleExpected, calculated, 0.01)
+    }
+
+    @Xpect
+    def void calculateTotalPeople(Resource resource, @XpectDouble doubleExpected) {
+        val model = resource.contents.head as TurtleProgram
+        val calculated = generator.calculateTotalPeople(model)
+        assertEquals(doubleExpected, calculated, 0.01)
+    }
+
+    @ParameterParser(syntax = "taskStatus '{taskId}'")
+    @Xpect
+    def void taskStatus(Resource resource, String taskId, @XpectString String expectedStatus) {
+        val model = resource.contents.head as TurtleProgram
+        val task = model.statements.filter(AddTask).findFirst[it.id == taskId]
+        val statusStatement = model.statements.filter(TaskStatus).findFirst[it.task == task]
+        val actualStatus = if (statusStatement !== null) statusStatement.status.toString else "unknown"
+        assertEquals(expectedStatus, actualStatus)
+    }
+}

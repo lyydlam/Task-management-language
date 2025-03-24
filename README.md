@@ -14,6 +14,7 @@ Hope you find it interesting!😊
 
 - `group`: define groups with custom size
 - `add task`: define tasks with:
+  - **Name** (unique string)
   - **Requirement** (description)
   - **Time** (float)
   - **Priority** (positive integer)

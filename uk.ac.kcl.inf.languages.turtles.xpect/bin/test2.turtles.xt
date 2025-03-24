@@ -1,0 +1,28 @@
+/* XPECT_SETUP uk.ac.kcl.inf.languages.turtles.xpect.XPectTests END_SETUP */
+/*
+XPECT generated ---
+Testing edge cases:
+- Priority zero (should trigger validation error)
+- Negative people required (should trigger validation error)
+- Repeat count zero (should trigger validation error)
+- Duplicate Task name (should trigger validation error)
+- Cyclic dependency (should trigger validation error)
+- Name or description not capitalized (should trigger quickfix warning)
+*/
+
+add task "t1" Requirement "taskone" time 30.0 priority 1 repeat 1 times people 1
+// XPECT warning at "taskone" --> Task requirement should start with a capital letter
+
+add task "t2" Requirement "Valid" time 60.0 priority 0 repeat 1 times people 1
+// XPECT error at "0" --> Priority must be positive
+
+add task "t4" Requirement "Deploy" time 90.0 priority 2 repeat 0 times people 2
+// XPECT error at "0" --> Repeat count must be a positive integer
+
+add task "dup" Requirement "A" time 20.0 priority 1 repeat 1 times people 1
+add task "dup" Requirement "B" time 20.0 priority 1 repeat 1 times people 1
+// XPECT error at "dup" --> Task name must be unique
+
+add task "x1" Requirement "Alpha" time 10.0 priority 1 repeat 1 times people 1 depends on "x2"
+add task "x2" Requirement "Beta" time 10.0 priority 1 repeat 1 times people 1 depends on "x1"
+// XPECT error at "x1" --> Cyclic dependency detected involving this task

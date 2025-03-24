@@ -5,12 +5,12 @@ The DSL allows users to define tasks with estimated time, priority, repetition c
 Features
 ● group: define groups with custom size
 ● add task: define tasks with
-  1 Requirement (description)
-  2 Time (float)
-  3 Priority (positive integer)
-  4 Repeat count (positive integer)
-  5 People (can use expressions with +, *, group reference)
-  6 Dependencies (optional)
+  *Requirement (description)
+  *Time (float)
+  *Priority (positive integer)
+  *Repeat count (positive integer)
+  *People (can use expressions with +, *, group reference)
+  *Dependencies (optional)
 ● status of: assign task status (waiting, in_progress, completed)
 ● calculate time for, calculate total time, calculate total people
 

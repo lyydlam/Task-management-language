@@ -74,19 +74,74 @@ Test cases using `.xt` files verify:
 group TeamA size 3
 group TeamB size 2
 
-add task "T1" Requirement "Analysis"
-time 2.5 priority 1 repeat 2 times people 3 + 1 * TeamA
+// add task
+add task "T1" 
+	Requirement"AnalysisRequirement" 
+    time 2.5 
+    priority 1 
+    repeat 2 times 
+    people 3 + 1 * TeamA
 
-add task "T2" Requirement "Design"
-time 1.0 priority 2 repeat 1 times people 2 + TeamB depends on "T1"
+add task "T2" 
+	Requirement "Design" 
+    time 1.0 
+    priority 2 
+    repeat 1 times 
+    people 2 + TeamB 
+    depends on "T1"
 
-add task "T3" Requirement "Testing"
-time 5.0 priority 1 repeat 3 times people TeamB depends on "T1"
-
+add task "T3" 
+	Requirement "Testing" 
+    time 5.0 
+    priority 1 
+    repeat 3 times 
+    people 5 * TeamB 
+    depends on "T1"
+    
+// define status
 status of "T1" is completed
 status of "T2" is in_progress
 status of "T3" is waiting
 
+// calculation
 calculate time for "T3"
 calculate total time
 calculate total people
+
+
+
+## For the above sample DSL input, the generated file would contain:
+Program contains:
+- 3 turn commands
+- 1 variable declarations
+- 3 task status checks
+- Total time required (waiting/inprogress): 16.0 minutes
+- Total people required: -1
+
+Task Details:
+- Task name: T1
+  Requirement: AnalysisRequirement
+  Required Time: 5.0 minutes
+  Priority: 1
+  Repeat Count: 2 times
+  Dependencies: 
+  People Required Expression: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl.AdditionImpl@761d20de (operator: [+])  // not evaluated
+  Status: completed
+
+- Task name: T2
+  Requirement: Design
+  Required Time: 1.0 minutes
+  Priority: 2
+  Repeat Count: 1 times
+  Dependencies: T1
+  People Required Expression: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl.AdditionImpl@13cf2632 (operator: [+])  // not evaluated
+  Status: in_progress
+
+- Task name: T3
+  Requirement: Testing
+  Required Time: 15.0 minutes
+  Priority: 1
+  Repeat Count: 3 times
+  Dependencies: T1
+  People Required Expression: uk.ac.kcl.inf.languages.turtles.turtlesLanguage.impl.MultiplicationImpl@b833dd7 (operator: [*])  // not evaluated
+  Status: waiting
